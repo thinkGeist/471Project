@@ -25,6 +25,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.content.ContentValues.TAG;
@@ -62,6 +65,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private Spinner spCountry;
+    private String array_spinner[];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +88,21 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                 // ...
             }
         };
+
+        // Set up country spinner
+        Locale[] locale = Locale.getAvailableLocales();
+        ArrayList<String> countries = new ArrayList<String>();
+        String country;
+        for(Locale l : locale){
+            country = l.getDisplayCountry();
+            if(country.length() > 0 && !countries.contains(country))
+                countries.add(country);
+        }
+        Collections.sort(countries, String.CASE_INSENSITIVE_ORDER);
+        spCountry = (Spinner) findViewById(R.id.spCountry);
+        ArrayAdapter<String> adapter =  new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, countries);
+        spCountry.setAdapter(adapter);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
@@ -109,6 +129,8 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
 
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+
     }
 
     public void onStart() {
