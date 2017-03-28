@@ -244,6 +244,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 Log.w(TAG, "signInWithEmail", task.getException());
                                 Toast.makeText(LoginActivity.this, "Authentication success.",
                                         Toast.LENGTH_SHORT).show();
+                                        Intent intent = new Intent(LoginActivity.this, ProfileActivity.class);
+                                        startActivity(intent);
                                 showProgress(false);
 
                             }
