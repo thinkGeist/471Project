@@ -34,11 +34,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static android.content.ContentValues.TAG;
@@ -59,12 +63,17 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      */
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
-
+    final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref = database.getReference("server/user-data");
     // UI references.
     private AutoCompleteTextView mEmailView;
+    private AutoCompleteTextView mProvinceView;
+    private AutoCompleteTextView mCityView;
+    private AutoCompleteTextView mUsernameView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+    private AutoCompleteTextView mNameView;
     private Spinner spCountry;
     private String array_spinner[];
 
@@ -105,6 +114,18 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         spCountry.setAdapter(adapter);
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        populateAutoComplete();
+
+        mUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
+        populateAutoComplete();
+
+        mNameView = (AutoCompleteTextView) findViewById(R.id.name);
+        populateAutoComplete();
+
+        mProvinceView = (AutoCompleteTextView) findViewById(R.id.province);
+        populateAutoComplete();
+
+        mCityView = (AutoCompleteTextView) findViewById(R.id.city);
         populateAutoComplete();
 
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -201,7 +222,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
         mPasswordView.setError(null);
 
         // Store values at the time of the login attempt.
-        String email = mEmailView.getText().toString();
+        final String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
 
         boolean cancel = false;
@@ -246,9 +267,22 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 Toast.makeText(RegisterActivity.this, "Registration failed.",
                                         Toast.LENGTH_SHORT).show();
                             }
+                            else {
+                                DatabaseReference usersRef = ref.child("users");
+                                String fullName = mNameView.getText().toString();
+                                String country = spCountry.getSelectedItem().toString();
+                                String province = mProvinceView.getText().toString();
+                                String city = mCityView.getText().toString();
+                                String username = mUsernameView.getText().toString();
+                                User newUser = new User("dob", username, fullName, country, province, city);
+                                Map<String, User> users = new HashMap<String, User>();
+                                users.put(mAuth.getCurrentUser().getUid(), newUser);
+                                usersRef.setValue(users);
+
+                                Toast.makeText(RegisterActivity.this, "Registration successful.",
+                                        Toast.LENGTH_SHORT).show();
+                            }
                             showProgress(false);
-                            Toast.makeText(RegisterActivity.this, "Registration successful.",
-                                    Toast.LENGTH_SHORT).show();
                             finish();
 
 
