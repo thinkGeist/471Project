@@ -5,6 +5,7 @@
     <string name="prompt_email">Email</string>
     <string name="prompt_username">Username</string>
     <string name="prompt_name">Name</string>
+    <string name="prompt_companyname">Company name</string>
     <string name="prompt_province">Province/State</string>
     <string name="prompt_city">City</string>
     <string name="prompt_password">Password</string>
