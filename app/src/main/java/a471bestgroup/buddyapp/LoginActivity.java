@@ -122,7 +122,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
         Button mCompanyRegisterButton = (Button) findViewById(R.id.company_register_button);
-        mEmailRegisterButton.setOnClickListener(new OnClickListener() {
+        mCompanyRegisterButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), RegCompanyActivity.class);
