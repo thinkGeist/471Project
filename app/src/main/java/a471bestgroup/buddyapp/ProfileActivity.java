@@ -32,10 +32,12 @@ public class ProfileActivity extends AppCompatActivity {
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                //user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
 
                 if (user != null) {
                     // User is signed in
+                    Toast.makeText(ProfileActivity.this, user.getEmail(),
+                            Toast.LENGTH_SHORT).show();
                     ValueEventListener userListener = new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -52,6 +54,8 @@ public class ProfileActivity extends AppCompatActivity {
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
+                    Toast.makeText(ProfileActivity.this, "User needs to log in",
+                            Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
                     startActivity(intent);
                 }
@@ -103,5 +107,19 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (mAuthListener != null) {
+            mAuth.removeAuthStateListener(mAuthListener);
+        }
     }
 }
