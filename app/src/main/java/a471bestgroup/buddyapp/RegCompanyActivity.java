@@ -274,7 +274,7 @@ public class RegCompanyActivity extends AppCompatActivity implements LoaderCallb
                                 Company newCompany = new Company(companyname, country, province, city, companyID);
                                 Map<String, Company> companies = new HashMap<String, Company>();
                                 companies.put(mAuth.getCurrentUser().getUid(), newCompany);
-                                companiesRef.setValue(companies);
+                                companiesRef.child(companyname).setValue(companies);
 
                                 Toast.makeText(RegCompanyActivity.this, "Registration successful.",
                                         Toast.LENGTH_SHORT).show();

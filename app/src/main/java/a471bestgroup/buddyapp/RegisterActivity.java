@@ -277,7 +277,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 User newUser = new User("dob", username, fullName, country, province, city);
                                 Map<String, User> users = new HashMap<String, User>();
                                 users.put(mAuth.getCurrentUser().getUid(), newUser);
-                                usersRef.setValue(users);
+                                usersRef.child(username).setValue(users);
 
                                 Toast.makeText(RegisterActivity.this, "Registration successful.",
                                         Toast.LENGTH_SHORT).show();
