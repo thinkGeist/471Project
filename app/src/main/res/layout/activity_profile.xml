@@ -20,11 +20,13 @@
 
         <Button
             android:id="@+id/profile_button"
-            android:layout_weight="1"
-            android:textSize="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Profile"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="Profile"
+            android:textColor="@color/colorPrimaryDarkText"
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/schedule_button"

@@ -1,5 +1,8 @@
 <resources>
+
     <string name="app_name">BuddyApp</string>
+    Typeface customFont = Typeface.createFromAsset(getAssets(), "fonts/manifesto.ttf");
+    BuddyApp.setTypeface(customFont);
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

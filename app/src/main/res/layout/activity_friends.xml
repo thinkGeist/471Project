@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
         <Button
@@ -44,11 +43,13 @@
 
         <Button
             android:id="@+id/friends_button"
-            android:layout_weight="1"
-            android:textSize="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Friends"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="Friends"
+            android:textColor="@color/colorPrimaryDarkText"
+            android:textSize="10dp" />
 
     </LinearLayout>
 

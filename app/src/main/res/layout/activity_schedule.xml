@@ -28,11 +28,13 @@
 
         <Button
             android:id="@+id/schedule_button"
-            android:layout_weight="1"
-            android:textSize="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Schedule"/>
+            android:layout_weight="1"
+            android:backgroundTint="@color/colorPrimaryDark"
+            android:text="Schedule"
+            android:textColor="@color/colorPrimaryDarkText"
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/calendar_button"
