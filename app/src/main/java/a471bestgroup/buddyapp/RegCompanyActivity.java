@@ -64,7 +64,7 @@ public class RegCompanyActivity extends AppCompatActivity implements LoaderCallb
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference ref = database.getReference("server/company-data");
+    DatabaseReference ref = database.getReference("server/user-data");
     // UI references.
     private AutoCompleteTextView mEmailView;
     private AutoCompleteTextView mProvinceView;
@@ -388,6 +388,4 @@ public class RegCompanyActivity extends AppCompatActivity implements LoaderCallb
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
     }
-
 }
-
