@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -274,6 +275,20 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 String province = mProvinceView.getText().toString();
                                 String city = mCityView.getText().toString();
                                 String username = mUsernameView.getText().toString();
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                        .setDisplayName(fullName)
+                                        .build();
+
+                                user.updateProfile(profileUpdates)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "User profile updated.");
+                                                }
+                                            }
+                                        });
                                 User newUser = new User("dob", username, fullName, country, province, city);
                                 Map<String, User> users = new HashMap<String, User>();
                                 users.put(mAuth.getCurrentUser().getUid(), newUser);

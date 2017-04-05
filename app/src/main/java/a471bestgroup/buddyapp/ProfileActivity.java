@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,6 +116,26 @@ public class ProfileActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+        user = mAuth.getCurrentUser();
+        TextView name = (TextView)findViewById(R.id.tvName);
+        name.setText(user.getDisplayName());
+
+        LinearLayout regEvents = (LinearLayout)findViewById(R.id.regLayout);
+        for(int i=0; i<10; i++){
+            Button button = new Button(getApplicationContext());
+            button.setHeight(15000);
+            regEvents.addView(button);
+            button.setText(Integer.toString(i));
+        }
+
+        LinearLayout upcomingEvents = (LinearLayout)findViewById(R.id.upcomingLayout);
+        for(int i=0; i<10; i++){
+            Button button = new Button(getApplicationContext());
+            button.setHeight(15000);
+            upcomingEvents.addView(button);
+            button.setText(Integer.toString(i));
+        }
+
     }
 
     @Override
