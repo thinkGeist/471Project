@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:backgroundTint="@color/colorPrimaryDark"
-            android:text="Profile"
+            android:text="Home"
             android:textColor="@color/colorPrimaryDarkText"
             android:textSize="10dp" />
 
