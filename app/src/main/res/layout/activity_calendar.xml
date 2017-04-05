@@ -16,7 +16,8 @@
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout2">
 
         <Button
             android:id="@+id/profile_button"
@@ -54,5 +55,22 @@
             android:text="Friends"/>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/newEvent_button"
+        android:textSize="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="New Event"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_alignParentStart="true" />
+
+    <CalendarView
+        android:id="@+id/simpleCalendarView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:firstDayOfWeek="1"
+        android:maxDate="01/01/2018"
+        android:minDate="01/01/2017" />
 
 </RelativeLayout>
