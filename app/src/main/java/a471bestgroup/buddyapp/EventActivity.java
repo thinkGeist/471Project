@@ -33,8 +33,7 @@ public class EventActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EventActivity.this, CalendarActivity.class);
-                startActivity(intent);
+                finish();
             }
         });
 
