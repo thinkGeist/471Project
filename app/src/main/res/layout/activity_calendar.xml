@@ -71,6 +71,7 @@
         android:layout_height="fill_parent"
         android:firstDayOfWeek="1"
         android:maxDate="01/01/2018"
-        android:minDate="01/01/2017" />
+        android:minDate="01/01/2017"
+        android:layout_above="@+id/newEvent_button" />
 
 </RelativeLayout>
