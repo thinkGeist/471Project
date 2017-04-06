@@ -217,11 +217,10 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
      * errors are presented and no actual login attempt is made.
      */
     private void attemptRegister() {
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
-
+        System.out.println("Attempt register");
         // Store values at the time of the login attempt.
         final String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
@@ -276,7 +275,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                 String city = mCityView.getText().toString();
                                 String username = mUsernameView.getText().toString();
                                 FirebaseUser user = mAuth.getCurrentUser();
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                /**UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                         .setDisplayName(fullName)
                                         .build();
 
@@ -288,9 +287,9 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                                     Log.d(TAG, "User profile updated.");
                                                 }
                                             }
-                                        });
+                                        });**/
                                 User newUser = new User("dob", username, fullName, country, province, city);    // creating a new user in database using data entered by user
-                                Map<String, User> users = new HashMap<String, User>();
+                                Map<String, Object> users = newUser.toMap();
                                 users.put(mAuth.getCurrentUser().getUid(), newUser);
                                 usersRef.child(username).setValue(users);
 
