@@ -70,8 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="New Event"
-        android:layout_marginBottom="15dp"
-        android:layout_alignBottom="@+id/view"
+        android:layout_above="@+id/linearLayout2"
         android:layout_alignParentStart="true" />
 
     <CalendarView
