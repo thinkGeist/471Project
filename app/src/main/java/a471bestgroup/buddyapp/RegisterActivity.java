@@ -290,7 +290,6 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                         });**/
                                 User newUser = new User("dob", username, fullName, country, province, city);    // creating a new user in database using data entered by user
                                 Map<String, Object> users = newUser.toMap();
-                                users.put(mAuth.getCurrentUser().getUid(), newUser);
                                 usersRef.child(username).setValue(users);
 
                                 Toast.makeText(RegisterActivity.this, "Registration successful.",
