@@ -36,7 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 user = firebaseAuth.getCurrentUser();
-                System.out.println(user);
+
                 if (user != null) {
                     // User is signed in
                     Toast.makeText(ProfileActivity.this, user.getEmail(),
@@ -116,11 +116,9 @@ public class ProfileActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
-
-        if(user != null) {
-            TextView name = (TextView) findViewById(R.id.tvName);
-            name.setText(user.getDisplayName());
-        }
+        user = mAuth.getCurrentUser();
+        TextView name = (TextView)findViewById(R.id.tvName);
+        name.setText(user.getDisplayName());
 
         LinearLayout regEvents = (LinearLayout)findViewById(R.id.regLayout);
         for(int i=0; i<10; i++){
