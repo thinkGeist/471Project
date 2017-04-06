@@ -35,6 +35,8 @@ public class Event {
         this.eventId = COUNTER;
     }
 
+    public Event() {}
+
     public int getEventId() {
         return eventId;
     }

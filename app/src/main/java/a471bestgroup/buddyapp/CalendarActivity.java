@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
-import android.widget.Toast;
 
 public class CalendarActivity extends AppCompatActivity {
     private int selectedMonth;
@@ -69,7 +68,7 @@ public class CalendarActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(CalendarActivity.this, EventActivity.class);
+                Intent intent = new Intent(CalendarActivity.this, CreateEventActivity.class);
                 Bundle b = new Bundle();
                 b.putInt("day", selectedDay);
                 b.putInt("month", selectedMonth);
