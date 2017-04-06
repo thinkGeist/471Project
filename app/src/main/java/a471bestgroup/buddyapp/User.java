@@ -3,6 +3,9 @@ package a471bestgroup.buddyapp;
 
 import com.google.firebase.database.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class User {
     private String dateOfBirth;
@@ -19,6 +22,30 @@ public class User {
         this.country = country;
         this.province = province;
         this.city = city;
+    }
+
+    public User(User other) {
+        this.dateOfBirth = other.getDateOfBirth();
+        this.username = other.getUsername();
+        this.fullName = other.getFullName();
+        this.country = other.getCountry();
+        this.province = other.getProvince();
+        this.city = other.getCity();
+    }
+
+    public User(){
+
+    }
+
+    public Map<String, Object> toMap(){
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("username", username);
+        result.put("dateOfBirth", dateOfBirth);
+        result.put("fullName", fullName);
+        result.put("country", country);
+        result.put("province", province);
+        result.put("city", city);
+        return result;
     }
 
     public String getUsername() {

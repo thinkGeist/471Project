@@ -28,9 +28,8 @@
         </activity>
         <activity android:name=".ScheduleActivity" />
         <activity android:name=".CalendarActivity" />
-        <activity android:name=".CreateEventActivity"    />
+        <activity android:name=".EventActivity"    />
         <activity android:name=".FriendsActivity" />
-        <activity android:name=".EventActivity" />
         <activity android:name=".RegCompanyActivity"></activity>
     </application>
 

@@ -15,11 +15,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
 
@@ -36,7 +32,6 @@ public class ProfileActivity extends AppCompatActivity {
 //        ReplaceFont.replaceDefaultFont(this, "sans-serif-medium", "Nunito-ExtraLight.ttf");
 
         mAuth = FirebaseAuth.getInstance();
-        //mAuth.signOut();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -122,10 +117,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
         user = mAuth.getCurrentUser();
-        if(user != null) {
-            TextView name = (TextView) findViewById(R.id.tvName);
-            name.setText(user.getDisplayName());
-        }
+        TextView name = (TextView)findViewById(R.id.tvName);
+        name.setText(user.getDisplayName());
 
         LinearLayout regEvents = (LinearLayout)findViewById(R.id.regLayout);
         for(int i=0; i<10; i++){
@@ -135,45 +128,14 @@ public class ProfileActivity extends AppCompatActivity {
             button.setText(Integer.toString(i));
         }
 
-/*        LinearLayout upcomingEvents = (LinearLayout)findViewById(R.id.upcomingLayout);
+        LinearLayout upcomingEvents = (LinearLayout)findViewById(R.id.upcomingLayout);
         for(int i=0; i<10; i++){
             Button button = new Button(getApplicationContext());
             button.setHeight(15000);
             upcomingEvents.addView(button);
             button.setText(Integer.toString(i));
-        }*/
+        }
 
-        final LinearLayout upcomingEvents = (LinearLayout)findViewById(R.id.upcomingLayout);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("server/event-data");
-        DatabaseReference eventsRef = ref.child("events");
-        final ArrayList<Event> events = new ArrayList<Event>();
-        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    final Event event = postSnapshot.getValue(Event.class);
-                    events.add(event);
-                    Button button = new Button(getApplicationContext());
-                    button.setHeight(15000);
-                    upcomingEvents.addView(button);
-                    button.setText(event.getName());
-                    button.setOnClickListener(new View.OnClickListener(){
-
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(ProfileActivity.this, EventActivity.class);
-                            Bundle b = new Bundle();
-                            b.putInt("eventId", event.getEventId());
-                            intent.putExtras(b);
-                            startActivity(intent);
-                        }
-                    });
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {}
-        });
     }
 
     @Override
