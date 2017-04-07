@@ -26,12 +26,12 @@ public class Event {
     public static int COUNTER = 0;
 
     public Event(String name, int month, int day, int year, String address, String ownerId) {
-        this.ownerId = ownerId;
         this.name = name;
         this.day = day;
         this.month = month;
         this.year = year;
         this.address = address;
+        this.ownerId = ownerId;
         this.eventId = COUNTER;
     }
 
@@ -83,5 +83,13 @@ public class Event {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
     }
 }

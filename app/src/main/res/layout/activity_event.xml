@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_schedule"
+    android:id="@+id/activity_event"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,55 +10,46 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="a471bestgroup.buddyapp.ScheduleActivity">
 
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
-        android:id="@+id/name_of_event"/>
+        android:gravity="center"
+        android:id="@+id/name_of_event"
+        android:textStyle="bold"
+        android:textSize="20.sp"
+        android:layout_marginTop="8dp"
+        android:layout_alignParentEnd="true" />
+
+
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout5">
 
         <Button
-            android:id="@+id/profile_button"
+            android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Home"
-            android:textSize="10dp" />
-
-        <Button
-            android:id="@+id/schedule_button"
-            android:layout_weight="1"
-            android:textSize="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Schedule"/>
-
-        <Button
-            android:id="@+id/calendar_button"
-            android:layout_weight="1"
-            android:textSize="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Calendar"/>
-
-        <Button
-            android:id="@+id/friends_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:text="Friends"
-            android:textColor="@color/colorPrimaryDarkText"
+            android:text="Back"
             android:textSize="10dp" />
 
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/registerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
 

@@ -137,14 +137,12 @@ public class ProfileActivity extends AppCompatActivity {
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("server/event-data");
         DatabaseReference eventsRef = ref.child("events");
-        final ArrayList<Event> events = new ArrayList<Event>();
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     final Event event = postSnapshot.getValue(Event.class);
-                    events.add(event);
-                    Button button = new Button(getApplicationContext());
+                    final Button button = new Button(getApplicationContext());
                     button.setHeight(15000);
                     upcomingEvents.addView(button);
                     button.setText(event.getName());
@@ -157,6 +155,7 @@ public class ProfileActivity extends AppCompatActivity {
                             b.putInt("eventId", event.getEventId());
                             intent.putExtras(b);
                             startActivity(intent);
+                            upcomingEvents.removeAllViews(); // delete buttons to avoid doubling buttons
                         }
                     });
                 }
