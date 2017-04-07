@@ -58,7 +58,7 @@ public class ProfileActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             currentUser = dataSnapshot.getValue(User.class);
-                           // Toast.makeText(this, currentUser.toString(), Toast.LENGTH_LONG);
+                            // Toast.makeText(this, currentUser.toString(), Toast.LENGTH_LONG);
                         }
 
                         @Override
@@ -123,6 +123,16 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        //Sign out
+        Button signOut = (Button) findViewById(R.id.sign_out_button);
+        signOut.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+            }
+        });
+
     }
 
     @Override
@@ -139,11 +149,11 @@ public class ProfileActivity extends AppCompatActivity {
         final DatabaseReference eventsRef = eventDataRef.child("events");
         DatabaseReference userDataRef = database.getReference("server/user-data");
         DatabaseReference usersRef = userDataRef.child("users");
-        DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
-        DatabaseReference userRegEventsRef = userRef.child("regEvents");
+        //DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
+        //DatabaseReference userRegEventsRef = userRef.child("regEvents");
 
         // draw buttons for events the user is registered in
-        userRegEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        /*userRegEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
@@ -166,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
-        });
+        });*/
 
         // draw buttons for upcoming events
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
