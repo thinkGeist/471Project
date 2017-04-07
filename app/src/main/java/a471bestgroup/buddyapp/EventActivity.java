@@ -100,7 +100,7 @@ public class EventActivity extends AppCompatActivity {
     public void register() {
         ArrayList<String> regEvents = new ArrayList<>();
         regEvents.add(eventId);
-        userRef.child("regEvents").setValue(regEvents);
+        userRegEventsRef.child(eventId).setValue(eventId);
         Toast.makeText(getApplicationContext(), "REGISTERED", Toast.LENGTH_LONG).show();
         finish();
     }
