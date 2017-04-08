@@ -140,56 +140,15 @@ public class ProfileActivity extends AppCompatActivity {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
         user = mAuth.getCurrentUser();
-        TextView name = (TextView)findViewById(R.id.tvName);
-        if(user != null)
+        TextView name = (TextView) findViewById(R.id.tvName);
+        if (user != null) {
             name.setText(user.getDisplayName());
-
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference eventDataRef = database.getReference("server/event-data");
-        final DatabaseReference eventsRef = eventDataRef.child("events");
-        DatabaseReference userDataRef = database.getReference("server/user-data");
-        DatabaseReference usersRef = userDataRef.child("users");
-        //DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
-        //DatabaseReference userRegEventsRef = userRef.child("regEvents");
-
-        // draw buttons for events the user is registered in
-        /*userRegEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    final String eventId = postSnapshot.getValue(String.class);
-                    eventsRef.addListenerForSingleValueEvent(new ValueEventListener()
-                    {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.child(eventId).exists()) {
-                                DataSnapshot childSnapshot = dataSnapshot.child(eventId);
-                                final Event event = childSnapshot.getValue(Event.class);
-                                newButtons(regEvents, event);
-                            }
-                        }
-                        @Override
-                        public void onCancelled(DatabaseError firebaseError) {}
-                    });
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });*/
-
-        // draw buttons for upcoming events
-        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                    final Event event = postSnapshot.getValue(Event.class);
-                    newButtons(upcomingEvents, event);
-                }
-            }
-            @Override
-            public void onCancelled(DatabaseError firebaseError) {}
-        });
+            displayEvents();
+        }
+        else {
+            Intent intent = new Intent(ProfileActivity.this, CreateEventActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -213,10 +172,58 @@ public class ProfileActivity extends AppCompatActivity {
                 Bundle b = new Bundle();
                 b.putInt("eventId", event.getEventId());
                 intent.putExtras(b);
-                upcomingEvents.removeAllViews(); // delete buttons to avoid doubling buttons
-                regEvents.removeAllViews();
                 startActivity(intent);
             }
+        });
+    }
+
+    public void displayEvents() {
+        upcomingEvents.removeAllViews(); // delete buttons to avoid doubling buttons
+        regEvents.removeAllViews();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference eventDataRef = database.getReference("server/event-data");
+        final DatabaseReference eventsRef = eventDataRef.child("events");
+        DatabaseReference usersRef = database.getReference("server/user-data/users");
+        DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
+        DatabaseReference userRegEventsRef = userRef.child("regEvents");
+
+        // draw buttons for events the user is registered in
+        userRegEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    final String eventId = postSnapshot.getValue(String.class);
+                    eventsRef.addListenerForSingleValueEvent(new ValueEventListener()
+                    {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(eventId).exists()) {
+                                DataSnapshot childSnapshot = dataSnapshot.child(eventId);
+                                final Event event = childSnapshot.getValue(Event.class);
+                                newButtons(regEvents, event);
+                            }
+                        }
+                        @Override
+                        public void onCancelled(DatabaseError firebaseError) {}
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+        // draw buttons for upcoming events
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    final Event event = postSnapshot.getValue(Event.class);
+                    newButtons(upcomingEvents, event);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {}
         });
     }
 }

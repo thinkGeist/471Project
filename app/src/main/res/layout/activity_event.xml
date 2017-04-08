@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="a471bestgroup.buddyapp.ScheduleActivity">
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,38 +17,132 @@
         android:gravity="center"
         android:id="@+id/name_of_event"
         android:textStyle="bold"
-        android:textSize="20.sp"
+        android:textSize="25.sp"
         android:layout_marginTop="8dp"
         android:layout_alignParentEnd="true" />
 
-
-
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/linearLayout5">
+        android:layout_below="@+id/name_of_event"
+        android:orientation="vertical"
+        android:id="@+id/event_info_layout">
 
-        <Button
-            android:id="@+id/back_button"
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Back"
-            android:textSize="10dp" />
+            android:id="@+id/location_label_event"
+            android:textStyle="bold"
+            android:textSize="16.sp"
+            android:layout_marginTop="8dp"
+            android:text="Location: "
+            android:layout_alignParentEnd="true" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16.0sp"
+            android:id="@+id/location_of_event"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/host_label_event"
+            android:textStyle="bold"
+            android:textSize="16.sp"
+            android:layout_marginTop="8dp"
+            android:text="Hosted by:"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16.0sp"
+            android:id="@+id/host_of_event"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/date_label_event"
+            android:textStyle="bold"
+            android:textSize="16.sp"
+            android:layout_marginTop="8dp"
+            android:text="Date:"
+            android:layout_alignParentEnd="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16.0sp"
+                android:id="@+id/month_of_event"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16.0sp"
+                android:id="@+id/day_of_event"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="16.0sp"
+                android:id="@+id/year_of_event"/>
+
+
+        </LinearLayout>
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tvRegUsers"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/event_info_layout"
+        android:layout_marginTop="20dp"
+        android:textStyle="bold"
+        android:text="Registered Users" />
+
+    <HorizontalScrollView
+        android:id="@+id/regView"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentEnd="true"
+
+        android:layout_below="@id/tvRegUsers"
+
+        android:layout_margin="5dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:id="@+id/regUsersLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/back_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Back"
+        android:textSize="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout
         android:id="@+id/registerLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_above="@id/back_button"/>
 
 </RelativeLayout>
 

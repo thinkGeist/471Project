@@ -27,23 +27,39 @@ public class EventActivity extends AppCompatActivity {
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
     private FirebaseAuth.AuthStateListener mAuthListener;
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
-    DatabaseReference eventDataRef = database.getReference("server/event-data");
-    DatabaseReference userDataRef = database.getReference("server/user-data");
-    DatabaseReference eventsRef = eventDataRef.child("events");
-    DatabaseReference usersRef = userDataRef.child("users");
-    DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
-    DatabaseReference userRegEventsRef = userRef.child("regEvents");
+    private DatabaseReference userDataRef = database.getReference("server/user-data");
+    private DatabaseReference usersRef = userDataRef.child("users");
+    private DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
+    private DatabaseReference userRegEventsRef = userRef.child("regEvents");
+    private DatabaseReference eventDataRef = database.getReference("server/event-data");
+    private DatabaseReference eventsRef = eventDataRef.child("events");
+    private DatabaseReference eventRef;
+    private DatabaseReference eventRegUsersRef;
     private String eventId;
     private TextView name_of_event;
+    private TextView location_of_event;
+    private TextView host_of_event;
+    private TextView month_of_event;
+    private TextView day_of_event;
+    private TextView year_of_event;
+    private Event event;
+    private User host;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
         name_of_event = (TextView) findViewById(R.id.name_of_event);
+        location_of_event = (TextView) findViewById(R.id.location_of_event);
+        host_of_event = (TextView) findViewById(R.id.host_of_event);
+        month_of_event = (TextView) findViewById(R.id.month_of_event);
+        day_of_event = (TextView) findViewById(R.id.day_of_event);
+        year_of_event = (TextView) findViewById(R.id.year_of_event);
 
         Bundle b = getIntent().getExtras();
         eventId = Integer.toString(b.getInt("eventId"));
+        eventRef = eventsRef.child(eventId);
+        eventRegUsersRef = eventRef.child("regUsers");
 
         //Back
         Button profile = (Button) findViewById(R.id.back_button);
@@ -65,8 +81,14 @@ public class EventActivity extends AppCompatActivity {
             public void onDataChange(final DataSnapshot dataSnapshot) {
                 if(dataSnapshot.child(eventId).exists()) {
                     DataSnapshot eventSnapshot = dataSnapshot.child(eventId);
-                    final Event event = eventSnapshot.getValue(Event.class);
+                    event = eventSnapshot.getValue(Event.class);
                     name_of_event.setText(event.getName());
+                    location_of_event.setText(event.getAddress());
+                    getHost();
+                    month_of_event.setText(Integer.toString(event.getMonth()) + "/");
+                    day_of_event.setText(Integer.toString(event.getDay()) + "/");
+                    year_of_event.setText(Integer.toString(event.getYear()));
+                    showRegUsers();
 
                     // check if this event created by current user
                     if(!(mAuth.getCurrentUser().getUid()).equals(event.getOwnerId())) {
@@ -74,6 +96,7 @@ public class EventActivity extends AppCompatActivity {
                     } else {
                         Button button = new Button(getApplicationContext());
                         button.setHeight(150);
+                        button.setWidth(registerUnregister.getWidth());
                         registerUnregister.addView(button);
                         button.setText("Cancel Event");
                         button.setOnClickListener(new View.OnClickListener(){
@@ -98,15 +121,15 @@ public class EventActivity extends AppCompatActivity {
     }
 
     public void register() {
-        ArrayList<String> regEvents = new ArrayList<>();
-        regEvents.add(eventId);
         userRegEventsRef.child(eventId).setValue(eventId);
+        eventRegUsersRef.child(mAuth.getCurrentUser().getUid()).setValue(mAuth.getCurrentUser().getUid());
         Toast.makeText(getApplicationContext(), "REGISTERED", Toast.LENGTH_LONG).show();
         finish();
     }
 
     public void unregister() {
         userRegEventsRef.child(eventId).removeValue();
+        eventRegUsersRef.child(mAuth.getCurrentUser().getUid()).removeValue();
         Toast.makeText(getApplicationContext(), "UNREGISTERED", Toast.LENGTH_LONG).show();
         finish();
     }
@@ -120,6 +143,7 @@ public class EventActivity extends AppCompatActivity {
                 if(dataSnapshot.child(eventId).exists()) {
                     Button button = new Button(getApplicationContext());
                     button.setHeight(150);
+                    button.setWidth(registerUnregister.getWidth());
                     registerUnregister.addView(button);
                     button.setText("Unregister");
                     button.setOnClickListener(new View.OnClickListener(){
@@ -133,6 +157,7 @@ public class EventActivity extends AppCompatActivity {
                     // user not yet registered in event
                     Button button = new Button(getApplicationContext());
                     button.setHeight(150);
+                    button.setWidth(registerUnregister.getWidth());
                     registerUnregister.addView(button);
                     button.setText("Register");
                     button.setOnClickListener(new View.OnClickListener(){
@@ -140,6 +165,53 @@ public class EventActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View v) {
                             register();
+                        }
+                    });
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {}
+        });
+    }
+
+    public void getHost() {
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(final DataSnapshot dataSnapshot) {
+                if(dataSnapshot.child(event.getOwnerId()).exists()) {
+                    DataSnapshot hostSnapshot = dataSnapshot.child(event.getOwnerId());
+                    host = hostSnapshot.getValue(User.class);
+                    host_of_event.setText(host.getUsername());
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {}
+        });
+    }
+
+    public void showRegUsers() {
+        final LinearLayout regUsersEvent = (LinearLayout) findViewById(R.id.regUsersLayout);
+        eventRegUsersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    final String userId = postSnapshot.getValue(String.class);
+                    usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child(userId).exists()) {
+                                DataSnapshot userSnapshot = dataSnapshot.child(userId);
+                                User user = userSnapshot.getValue(User.class);
+                                Button button = new Button(getApplicationContext());
+                                button.setHeight(15000);
+                                regUsersEvent.addView(button);
+                                button.setText(user.getUsername());
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
                     });
                 }
