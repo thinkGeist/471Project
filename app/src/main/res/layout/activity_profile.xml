@@ -71,61 +71,103 @@
         android:layout_marginTop="11dp"
         android:text="Name" />
 
-
-    <TextView
-        android:id="@+id/tvRegEvents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/tvName"
-        android:layout_marginTop="5dp"
-        android:text="Registered Events" />
-
-    <HorizontalScrollView
-        android:id="@+id/regView"
+    <ScrollView
+        android:id="@+id/profileView"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentEnd="true"
-
-        android:layout_below="@id/tvRegEvents"
-
-        android:layout_margin="5dp"
-        android:fillViewport="true">
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/sign_out_button"
+        android:layout_below="@+id/tvName">
 
         <LinearLayout
-            android:id="@+id/regLayout"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tvUpcoming"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@id/regView"
-        android:layout_marginTop="5dp"
-        android:text="Upcoming Events" />
 
-    <HorizontalScrollView
-        android:id="@+id/upcomingView"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+            <TextView
+                android:id="@+id/tvRegEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/tvName"
+                android:layout_marginTop="5dp"
+                android:text="Registered Events" />
 
-        android:layout_alignParentEnd="true"
+            <HorizontalScrollView
+                android:id="@+id/regView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_alignParentEnd="true"
 
-        android:layout_below="@id/tvUpcoming"
+                android:layout_below="@id/tvRegEvents"
 
-        android:layout_margin="5dp"
-        android:fillViewport="true">
+                android:layout_margin="5dp"
+                android:fillViewport="true">
 
-        <LinearLayout
-            android:id="@+id/upcomingLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:orientation="horizontal" />
-    </HorizontalScrollView>
+                <LinearLayout
+                    android:id="@+id/regLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/tvUpcoming"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/regView"
+                android:layout_marginTop="5dp"
+                android:text="Upcoming Events" />
+
+            <HorizontalScrollView
+                android:id="@+id/upcomingView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+
+                android:layout_alignParentEnd="true"
+
+                android:layout_below="@id/tvUpcoming"
+
+                android:layout_margin="5dp"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:id="@+id/upcomingLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/tvMyEvents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@id/upcomingView"
+                android:layout_marginTop="5dp"
+                android:text="My Events" />
+
+            <HorizontalScrollView
+                android:id="@+id/myEventsView"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+
+                android:layout_alignParentEnd="true"
+
+                android:layout_below="@id/tvMyEvents"
+
+                android:layout_margin="5dp"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:id="@+id/myEventsLayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+        </LinearLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/sign_out_button"

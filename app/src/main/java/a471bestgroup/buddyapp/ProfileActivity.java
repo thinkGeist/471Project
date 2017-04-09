@@ -32,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private LinearLayout regEvents = null;
     private LinearLayout upcomingEvents = null;
+    private LinearLayout myEvents = null;
 
 
     @Override
@@ -42,6 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         regEvents = (LinearLayout)findViewById(R.id.regLayout);
         upcomingEvents = (LinearLayout)findViewById(R.id.upcomingLayout);
+        myEvents = (LinearLayout)findViewById(R.id.myEventsLayout);
 //        ReplaceFont.replaceDefaultFont(this, "sans-serif-medium", "Nunito-ExtraLight.ttf");
 
         mAuth = FirebaseAuth.getInstance();
@@ -180,6 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
     public void displayEvents() {
         upcomingEvents.removeAllViews(); // delete buttons to avoid doubling buttons
         regEvents.removeAllViews();
+        myEvents.removeAllViews();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference eventDataRef = database.getReference("server/event-data");
         final DatabaseReference eventsRef = eventDataRef.child("events");
@@ -220,6 +223,20 @@ public class ProfileActivity extends AppCompatActivity {
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                     final Event event = postSnapshot.getValue(Event.class);
                     newButtons(upcomingEvents, event);
+                }
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {}
+        });
+
+        // draw buttons for user's own events
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    final Event event = postSnapshot.getValue(Event.class);
+                    if((event.getOwnerId()).equals(mAuth.getCurrentUser().getUid()))
+                        newButtons(myEvents, event);
                 }
             }
             @Override

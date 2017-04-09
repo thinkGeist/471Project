@@ -54,11 +54,15 @@
             android:text="Hosted by:"
             android:layout_alignParentEnd="true" />
 
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16.0sp"
-            android:id="@+id/host_of_event"/>
+            android:id="@+id/host_of_event"
+            style="?android:attr/borderlessButtonStyle"
+            android:textAllCaps="false"
+            android:minHeight="0dp"
+            android:minWidth="0dp"/>
 
         <TextView
             android:layout_width="wrap_content"

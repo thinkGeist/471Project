@@ -1,6 +1,7 @@
 package a471bestgroup.buddyapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -38,7 +39,7 @@ public class EventActivity extends AppCompatActivity {
     private String eventId;
     private TextView name_of_event;
     private TextView location_of_event;
-    private TextView host_of_event;
+    private Button host_of_event;
     private TextView month_of_event;
     private TextView day_of_event;
     private TextView year_of_event;
@@ -51,7 +52,7 @@ public class EventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_event);
         name_of_event = (TextView) findViewById(R.id.name_of_event);
         location_of_event = (TextView) findViewById(R.id.location_of_event);
-        host_of_event = (TextView) findViewById(R.id.host_of_event);
+        host_of_event = (Button) findViewById(R.id.host_of_event);
         month_of_event = (TextView) findViewById(R.id.month_of_event);
         day_of_event = (TextView) findViewById(R.id.day_of_event);
         year_of_event = (TextView) findViewById(R.id.year_of_event);
@@ -116,6 +117,38 @@ public class EventActivity extends AppCompatActivity {
 
     public void cancelEvent() {
         eventsRef.child(eventId).removeValue();
+        // remove event from all users registered
+        usersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String userId = postSnapshot.getKey();
+                    final DatabaseReference userRef = usersRef.child(userId);
+                    userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot userSnapshot) {
+                            if(userSnapshot.child("regEvents").exists()) {
+                                DatabaseReference userEventRef = userRef.child("regEvents");
+                                for(DataSnapshot eventSnapshot : userSnapshot.getChildren()) {
+                                    if(eventSnapshot.child(eventId).exists())
+                                        userEventRef.child(eventId).removeValue();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         Toast.makeText(getApplicationContext(), "EVENT CANCELLED", Toast.LENGTH_LONG).show();
         finish();
     }
@@ -182,6 +215,18 @@ public class EventActivity extends AppCompatActivity {
                     DataSnapshot hostSnapshot = dataSnapshot.child(event.getOwnerId());
                     host = hostSnapshot.getValue(User.class);
                     host_of_event.setText(host.getUsername());
+                    host_of_event.setTextColor(Color.BLUE);
+                    host_of_event.setOnClickListener(new View.OnClickListener(){
+
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(EventActivity.this, ViewUserProfileActivity.class);
+                            Bundle b = new Bundle();
+                            b.putString("userId", event.getOwnerId());
+                            intent.putExtras(b);
+                            startActivity(intent);
+                        }
+                    });
                 }
             }
             @Override
@@ -206,6 +251,17 @@ public class EventActivity extends AppCompatActivity {
                                 button.setHeight(15000);
                                 regUsersEvent.addView(button);
                                 button.setText(user.getUsername());
+                                button.setOnClickListener(new View.OnClickListener(){
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        Intent intent = new Intent(EventActivity.this, ViewUserProfileActivity.class);
+                                        Bundle b = new Bundle();
+                                        b.putString("userId", userId);
+                                        intent.putExtras(b);
+                                        startActivity(intent);
+                                    }
+                                });
                             }
                         }
 

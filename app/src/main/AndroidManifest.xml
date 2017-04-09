@@ -32,6 +32,7 @@
         <activity android:name=".FriendsActivity" />
         <activity android:name=".AddFriendActivity"/>
         <activity android:name=".CreateEventActivity"/>
+        <activity android:name=".ViewUserProfileActivity"/>
         <activity android:name=".RegCompanyActivity"></activity>
     </application>
 
