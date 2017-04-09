@@ -152,6 +152,7 @@ public class FriendsActivity extends AppCompatActivity {
             }
         });
         // Get friends list
+        dbRef = FirebaseDatabase.getInstance().getReference();
         dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friends");
         query = dbRef.orderByChild("fullName");
         query.addValueEventListener(new ValueEventListener() {
@@ -164,7 +165,7 @@ public class FriendsActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), friend.getFullName(), Toast.LENGTH_LONG).show();
                 }
                 for(int i=0; i<friendArrayList.size(); i++){
-                    final Button friend = new Button(getApplicationContext());
+                    Button friend = new Button(getApplicationContext());
                     friend.setText(friendArrayList.get(i).getFullName());
                     friend.setTag(friendArrayList.get(i).getUid());
                     friendList.addView(friend);
