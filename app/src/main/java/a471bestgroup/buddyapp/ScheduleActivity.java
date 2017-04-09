@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,9 +80,7 @@ public class ScheduleActivity extends AppCompatActivity {
             }
         };
 
-        //eventList.add(new Event("Test", 12, 12, 2017, "test", "test"));
         populateList();
-        //populateListView();
 
         //Profile
         Button profile = (Button) findViewById(R.id.profile_button);
@@ -138,6 +135,7 @@ public class ScheduleActivity extends AppCompatActivity {
         DatabaseReference usersRef = database.getReference("server/user-data/users");
         DatabaseReference userRef = usersRef.child(mAuth.getCurrentUser().getUid());
         DatabaseReference userRegEventsRef = userRef.child("regEvents");
+
         userRegEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -163,6 +161,18 @@ public class ScheduleActivity extends AppCompatActivity {
             public void onCancelled(DatabaseError databaseError) {
             }
         });
+        eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                    final Event event = postSnapshot.getValue(Event.class);
+                    if((event.getOwnerId()).equals(mAuth.getCurrentUser().getUid()))
+                        eventList.add(event);
+                        populateListView();                }
+            }
+            @Override
+            public void onCancelled(DatabaseError firebaseError) {}
+        });
     }
 
     private void populateListView() {
@@ -178,14 +188,15 @@ public class ScheduleActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            // Make sure we have a view to work with (may have been given null)
+
             View itemView = convertView;
+
             if (itemView == null) {
                 itemView = getLayoutInflater().inflate(R.layout.single_event_element, parent, false);
             }
 
             // Find the car to work with.
-            Event currentEvent = eventList.get(position);
+            final Event currentEvent = eventList.get(position);
 
             // Name:
             TextView nameText = (TextView) itemView.findViewById(R.id.eventName);
@@ -193,7 +204,7 @@ public class ScheduleActivity extends AppCompatActivity {
 
             // Date:
             TextView dateText = (TextView) itemView.findViewById(R.id.eventDate);
-            dateText.setText(currentEvent.getMonth() + " " + currentEvent.getDay() + ", " + currentEvent.getYear());
+            dateText.setText(currentEvent.getDay() + "/" + currentEvent.getMonth() + "/" + currentEvent.getYear());
 
             // Location:
             TextView locText = (TextView) itemView.findViewById(R.id.eventLocation);
