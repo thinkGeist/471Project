@@ -65,6 +65,7 @@ public class ViewUserProfileActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         userId = b.getString("userId");
+        System.out.println("USER: " +userId);
 
         mAuth = FirebaseAuth.getInstance();
 

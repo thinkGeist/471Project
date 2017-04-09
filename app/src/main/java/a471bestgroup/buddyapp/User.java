@@ -10,13 +10,15 @@ import java.util.Map;
 public class User {
     private String dateOfBirth;
     private String username;
+    private String uid;
     private String fullName;
     private String country;
     private String province;
     private String city;
 
-    public User(String dob, String username, String fullName, String country, String province, String city){
+    public User(String dob, String uid, String username, String fullName, String country, String province, String city){
         this.dateOfBirth = dob;
+        this.uid = uid;
         this.username = username;
         this.fullName = fullName;
         this.country = country;
@@ -40,12 +42,21 @@ public class User {
     public Map<String, Object> toMap(){
         HashMap<String, Object> result = new HashMap<>();
         result.put("username", username);
+        result.put("uid", uid);
         result.put("dateOfBirth", dateOfBirth);
         result.put("fullName", fullName);
         result.put("country", country);
         result.put("province", province);
         result.put("city", city);
         return result;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUsername() {

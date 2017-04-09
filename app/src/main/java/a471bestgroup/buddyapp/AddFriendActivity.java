@@ -1,5 +1,6 @@
 package a471bestgroup.buddyapp;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,7 +9,10 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,36 +21,26 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class AddFriendActivity extends AppCompatActivity {
-
-    private ArrayList<String> searchResults;
+    private FirebaseAuth mAuth;
+    private ArrayList<User> searchResults;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addfriend);
+        mAuth = FirebaseAuth.getInstance();
+        searchResults = new ArrayList<User>();
+        final LinearLayout addFriendLayout = (LinearLayout) findViewById(R.id.friends_layout) ;
 
-
-        //Cancel
-        Button cancel = (Button) findViewById(R.id.cancel_button);
-        cancel.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        //Create Event
-        Button createEvent = (Button) findViewById(R.id.create_event_button);
+        // Finished
+        Button createEvent = (Button) findViewById(R.id.return_button);
         createEvent.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(EventActivity.this, ScheduleActivity.class);
-                //startActivity(intent);
-
-                Toast.makeText(getApplicationContext(), "I STILL HAVE TO FIGURE OUT THE DATABASE THINGY", Toast.LENGTH_LONG).show();
+                finish();
             }
         });
 
@@ -68,8 +62,28 @@ public class AddFriendActivity extends AppCompatActivity {
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
                                 User user  = postSnapshot.getValue(User.class);
+                                searchResults.add(user);
                                 Toast.makeText(AddFriendActivity.this, user.getFullName(),
                                         Toast.LENGTH_SHORT).show();
+                                final ToggleButton addFriend = new ToggleButton(getApplicationContext());
+                                addFriend.setChecked(false);
+                                addFriend.setText("Add " + searchResults.get(0).getFullName());
+                                addFriendLayout.addView(addFriend);
+                                addFriend.setOnClickListener(new View.OnClickListener() {
+
+                                    @Override
+                                    public void onClick(View v) {
+                                        //Intent intent = new Intent(EventActivity.this, ScheduleActivity.class);
+                                        //startActivity(intent);
+
+                                            addFriend.setChecked(true);
+                                            addFriend.setText(searchResults.get(0).getFullName() + " added");
+                                            addFriend.setBackgroundColor(Color.parseColor("#1CD5ED"));
+                                            addFriend.setClickable(false);
+                                            dbAddFriend(searchResults.get(0));
+
+                                    }
+                                });
 
                             }
                         }
@@ -80,7 +94,17 @@ public class AddFriendActivity extends AppCompatActivity {
                         }
                     });
                 }
+
             }
         });
+    }
+
+    private void dbAddFriend(User toAdd){
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friends");
+        Friend friend = new Friend(toAdd.getUsername(), toAdd.getFullName(), toAdd.getUid());
+        Map<String, Object> users = friend.toMap();
+        dbRef.child(toAdd.getUsername()).setValue(users);
+
     }
 }
