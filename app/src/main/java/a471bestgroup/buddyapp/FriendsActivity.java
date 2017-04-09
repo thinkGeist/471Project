@@ -1,6 +1,7 @@
 package a471bestgroup.buddyapp;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,17 +20,39 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class FriendsActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ArrayList<Friend> friendArrayList;
+    private ArrayList<Friend> friendReqList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mAuth = FirebaseAuth.getInstance();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_friends);
         friendArrayList = new ArrayList<>();
+        friendReqList = new ArrayList<>();
+
+        final View.OnClickListener confirmFriend = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button pressed = (Button)v;
+                int id = (Integer) pressed.getTag();
+                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+                dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friends");
+                Friend friend = friendReqList.get(id);
+                Map<String, Object> users = friend.toMap();
+                dbRef.child(friend.getUsername()).setValue(users);
+                v.setBackgroundColor(Color.parseColor("#1CD5ED"));
+                ((Button) v).setText(friend.getFullName() + " added!");
+                dbRef = FirebaseDatabase.getInstance().getReference();
+                dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friendreq");
+                dbRef.child(friend.getUsername()).removeValue();
+            }
+        };
 
         final View.OnClickListener openFriend = new View.OnClickListener() {
             @Override
@@ -99,11 +123,37 @@ public class FriendsActivity extends AppCompatActivity {
         });
 
         final LinearLayout friendList = (LinearLayout)findViewById(R.id.friends_layout);
-
-        // Get friends list
+        // Get friend requests
         DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friendreq");
+        Query query = dbRef.orderByChild("username");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot postSnapshot : dataSnapshot.getChildren()){
+                    Friend friendReq = postSnapshot.getValue(Friend.class);
+                    friendReqList.add(friendReq);
+                    System.out.println("FAS: " + friendReqList.size());
+                    Toast.makeText(getApplicationContext(), friendReq.getFullName(), Toast.LENGTH_LONG).show();
+                }
+                for(int i=0; i<friendReqList.size(); i++){
+                    final Button friendReqButton = new Button(getApplicationContext());
+                    friendReqButton.setText(("Add " + friendReqList.get(i).getFullName() + "?"));
+                    friendReqButton.setTag(i);
+                    friendList.addView(friendReqButton);
+                    friendReqButton.setOnClickListener(confirmFriend);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        // Get friends list
         dbRef = dbRef.child("server").child("user-data").child("users").child(mAuth.getCurrentUser().getUid()).child("friends");
-        Query query = dbRef.orderByChild("fullName");
+        query = dbRef.orderByChild("fullName");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {

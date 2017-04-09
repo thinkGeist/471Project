@@ -26,12 +26,33 @@ import java.util.Map;
 public class AddFriendActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ArrayList<User> searchResults;
+    private User currentUser;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addfriend);
         mAuth = FirebaseAuth.getInstance();
         searchResults = new ArrayList<User>();
+
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef = dbRef.child("server").child("user-data").child("users");
+        Query query = dbRef.orderByChild("uid").equalTo(mAuth.getCurrentUser().getUid());
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                System.out.println("Amount of captured: " + dataSnapshot.toString());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    currentUser = postSnapshot.getValue(User.class);
+
+                }
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         final LinearLayout addFriendLayout = (LinearLayout) findViewById(R.id.friends_layout) ;
 
         // Finished
@@ -105,6 +126,14 @@ public class AddFriendActivity extends AppCompatActivity {
         Friend friend = new Friend(toAdd.getUsername(), toAdd.getFullName(), toAdd.getUid());
         Map<String, Object> users = friend.toMap();
         dbRef.child(toAdd.getUsername()).setValue(users);
+
+        // Create friend request
+
+        dbRef = FirebaseDatabase.getInstance().getReference();
+        dbRef = dbRef.child("server").child("user-data").child("users").child(toAdd.getUid()).child("friendreq");
+        Friend request = new Friend(currentUser.getUsername(), currentUser.getFullName(), currentUser.getUid());
+        Map<String, Object> reqAdd = request.toMap();
+        dbRef.child(currentUser.getUsername()).setValue(reqAdd);
 
     }
 }
