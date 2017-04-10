@@ -288,7 +288,7 @@ public class RegisterActivity extends AppCompatActivity implements LoaderCallbac
                                                 }
                                             }
                                         });**/
-                                User newUser = new User("dob", username, user.getUid(), fullName, country, province, city);    // creating a new user in database using data entered by user
+                                User newUser = new User("dob", user.getUid(), username, fullName, country, province, city);    // creating a new user in database using data entered by user
                                 Map<String, Object> users = newUser.toMap();
                                 usersRef.child(mAuth.getCurrentUser().getUid()).setValue(users);
 
