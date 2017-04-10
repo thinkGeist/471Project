@@ -16,11 +16,14 @@
         android:id="@+id/button_addFriend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clickable="true"
-        app:fabSize="mini"
-        app:srcCompat="@android:drawable/ic_input_add"
         android:layout_above="@+id/linearLayout"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:clickable="true"
+        android:tint="@color/colorPrimaryDarkText"
+        app:backgroundTint="@color/colorAccent"
+        app:fabSize="mini"
+        app:rippleColor="@color/colorPrimaryDarkText"
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <ScrollView
         android:layout_width="match_parent"
